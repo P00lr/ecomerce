@@ -1,7 +1,6 @@
 package com.paul.ecomerce.model.entity;
 
-
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jakarta.persistence.JoinColumn;
@@ -30,13 +29,19 @@ public class Role {
     private Long id;
 
     private String name;
-    private boolean enabled;
+    private boolean enabled = true;
 
     @ManyToMany
-    @JoinTable(
-        name = "roles_permissions",
-        joinColumns = @JoinColumn(name = "role_id"),
-        inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private Set<Permission> permissions = new HashSet<>();
+    @JoinTable(name = "roles_permissions", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private Set<Permission> permissions = new LinkedHashSet<>();
+
+    public void deactivate() {
+        if (enabled == true)
+            enabled = false;
+    }
+
+    public void activate() {
+        if (enabled == false)
+            enabled = true;
+    }
 }

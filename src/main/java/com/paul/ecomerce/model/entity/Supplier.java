@@ -3,6 +3,8 @@ package com.paul.ecomerce.model.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.paul.ecomerce.dto.supplier.SupplierRequestUpdateDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,4 +35,22 @@ public class Supplier {
 
     @OneToMany(mappedBy = "supplier")
     private Set<Purchase> purchases = new HashSet<>();
+
+    public void updateFromDto(SupplierRequestUpdateDto supplierDto) {
+        if(!this.getName().equals(supplierDto.name()))
+            this.setName(supplierDto.name());
+
+        if(!this.getEmail().equals(supplierDto.email()))
+            this.setEmail(supplierDto.email());
+
+        if(!this.getPhone().equals(supplierDto.phone()))
+            this.setPhone(supplierDto.phone());
+
+        if(!this.getAddress().equals(supplierDto.address()))
+            this.setAddress(supplierDto.address());
+
+        if(supplierDto.enabled() == true)
+            this.setEnabled(true);
+
+    }
 }

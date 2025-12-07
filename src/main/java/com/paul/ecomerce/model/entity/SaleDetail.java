@@ -32,7 +32,10 @@ public class SaleDetail {
     private Sale sale;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-    
+    @JoinColumn(name = "product_variant_id")
+    private ProductVariant productVariant;
+
+    public void calculateSubtotal() {
+        this.subtotal = this.productVariant.getPrice().multiply(BigDecimal.valueOf(quantity));
+    }
 }

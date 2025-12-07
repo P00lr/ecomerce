@@ -1,7 +1,10 @@
 package com.paul.ecomerce.model.entity;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.paul.ecomerce.dto.product.ProductRequestDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,22 +31,36 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Double price;
+    private BigDecimal basePrice;
     private String description;
-    private Integer stock;
-    private boolean enabled;
-
-    @OneToMany(mappedBy = "product")
-    private Set<SaleDetail> saleDetails = new HashSet<>();
+    private String productCode;
+    private boolean enabled = true;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product")
-    private Set<PurchaseDetail> purchaseDetails = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 
     @OneToMany(mappedBy = "product")
-    private Set<AdjustmentDetail> adjustmentDetails = new HashSet<>();
+    private Set<ProductVariant> productVariants = new HashSet<>();
 
+    public void updateFromDto(ProductRequestDto productDto, Category category, Brand brand) {
+        if(!this.name.equals(productDto.name()))
+            this.setName(productDto.name());
+
+        if(!this.basePrice.equals(productDto.basePrice()))
+            this.setBasePrice(productDto.basePrice());
+        
+        if(!this.description.equals(productDto.description()))
+            this.setDescription(productDto.description());
+        
+        if(!this.category.equals(category))
+            this.setCategory(category);
+
+        if(!this.brand.equals(brand))
+            this.setBrand(brand);
+    }
 }

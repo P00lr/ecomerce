@@ -1,5 +1,6 @@
 package com.paul.ecomerce.model.entity;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,5 +23,15 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private boolean enabled;
+    private boolean enabled = true;
+
+    public void deactivate() {
+        if(enabled == true)
+            enabled = false;
+    }
+
+    public void activate() {
+        if(enabled == false)
+            enabled = true;
+    }
 }

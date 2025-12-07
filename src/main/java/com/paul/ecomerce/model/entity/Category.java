@@ -3,6 +3,8 @@ package com.paul.ecomerce.model.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.paul.ecomerce.dto.category.CategoryRequestUpdateDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,8 +28,17 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private boolean enabled;
+    private boolean enabled = true;
 
     @OneToMany(mappedBy = "category")
     private Set<Product> products = new HashSet<>();
+
+    public void updateFromDto(CategoryRequestUpdateDto categoryDto) {
+        if(!this.getName().equals(categoryDto.name()))
+            this.setName(categoryDto.name());
+
+        if(categoryDto.enabled() == true)
+            this.setEnabled(true);
+
+    }
 }

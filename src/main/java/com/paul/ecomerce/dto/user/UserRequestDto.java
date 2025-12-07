@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record UserRequestDto(
+public record   UserRequestDto(
     @NotBlank(message = "El nombre no puede estar vacío")
     @Size(min = 3 , max = 100, message = "El nombre no puede superar 100 caracteres")
     String name,
@@ -12,6 +12,11 @@ public record UserRequestDto(
     @NotBlank(message = "El username no puede estar vacío")
     @Size(min = 3, max = 50, message = "El username debe tener entre 3 y 50 caracteres")
     String username,
+
+    @Pattern(
+    regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_\\-])[A-Za-z\\d@$!%*?&_\\-]{8,16}$",
+    message = "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial")
+    String password,
 
     @NotBlank(message = "El email no puede estar vacío")
     @Pattern(

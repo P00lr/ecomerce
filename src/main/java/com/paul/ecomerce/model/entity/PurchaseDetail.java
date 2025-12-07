@@ -28,13 +28,18 @@ public class PurchaseDetail {
     private Long id;
     private Integer quantity;
     private BigDecimal subtotal;
+    private BigDecimal unitPrice;
 
     @ManyToOne
     @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "product_variant_id")
+    private ProductVariant productVariant;
 
+    public void calculateSubtotal(BigDecimal unitCost) {
+        unitPrice = unitCost;
+        subtotal = BigDecimal.valueOf(quantity).multiply(unitCost);
+    }
 }

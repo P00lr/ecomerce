@@ -1,6 +1,8 @@
 package com.paul.ecomerce.controller;
 
+
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paul.ecomerce.dto.PageResponseDto;
+import com.paul.ecomerce.dto.user.UpdatePasswordDto;
 import com.paul.ecomerce.dto.user.UserRequestDto;
 import com.paul.ecomerce.dto.user.UserResponseDto;
 import com.paul.ecomerce.service.UserService;
@@ -21,14 +24,14 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<PageResponseDto<UserResponseDto>> getAllUsers(Pageable pageable) {
-        PageResponseDto<UserResponseDto> response = userService.getAllUsers(pageable);
+    public ResponseEntity<PageResponseDto<UserResponseDto>> getAllUsersPaged(Pageable pageable) {
+        PageResponseDto<UserResponseDto> response = userService.getAllUsersPaged(pageable);
         return ResponseEntity.ok(response);
     }
 
@@ -45,9 +48,17 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(
-        @PathVariable Long id, 
-        @Valid @RequestBody UserRequestDto userDto) {
+            @PathVariable Long id,
+            @Valid @RequestBody UserRequestDto userDto) {
         return ResponseEntity.ok(userService.updateUser(id, userDto));
+    }
+
+    @PutMapping("/update-password/{id}")
+    public ResponseEntity<String> updateUserPassword(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdatePasswordDto passwordDto) {
+        userService.updatePassword(id, passwordDto);
+        return ResponseEntity.status(HttpStatus.OK).body("Se actualizo correctamente la contraseña");
     }
 
     @DeleteMapping("/{id}")
